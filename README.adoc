@@ -18,7 +18,7 @@ include::https://raw.githubusercontent.com/pcf-guides/getting-started-macros/mas
 [[initial]]
 == Enable the discovery client
 
-Starting with the Eureka-enabled "hello world" example from link:/gs-service-registry[Registering and Discovering Services], you'll start by adding a circuit breaker to the client code.
+Starting with the Eureka-enabled "hello world" example from link:guides/gs/gs-service-registry[Registering and Discovering Services], you'll start by adding a circuit breaker to the client code.
 
 First, modify the Maven POM, adding the starter dependencies for Hystrix and Hystrix AMQP:
 
