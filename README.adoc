@@ -33,28 +33,28 @@ The Spring Cloud Hystrix starter adds the Hystrix circuit breaker library to the
 
 Next, you'll need to enable the circuit breaker capability by annotating `DemoApplication` with `@EnableCircuitBreaker`.
 
-`src/main/java/hello/DemoApplication.java`
+`src/main/java/demo/DemoApplication.java`
 [source,java]
 ----
-include::complete/greeting-client/src/main/java/hello/DemoApplication.java[]
+include::complete/greeting-client/src/main/java/demo/DemoApplication.java[]
 ----
 
 The `@EnableCircuitBreaker` annotation enables Hystrix beans in the application that support circuit breaker behavior. This will enable you to annotate methods with `@HystrixCommand` to designate them as being protected by a circuit breaker. 
 
 As an example, the `hello()` method in `GreetingClientController` makes a REST call to the greeting service. If the service is unavailable, the `hello()` method could fail. To protect the method, annotate it with `@HystrixCommand`:
 
-`src/main/java/hello/GreetingClientController.java`
+`src/main/java/demo/GreetingClientController.java`
 [source,java]
 ----
-include::complete/greeting-client/src/main/java/hello/GreetingClientController.java[tag=helloMethod]
+include::complete/greeting-client/src/main/java/demo/GreetingClientController.java[tag=helloMethod]
 ----
 
 The `fallbackMethod` attribute in `@HystrixCommand` specifies that if the `hello()` method fails, the fallback `goodbye()` method should be called instead. Add the following `goodbye()` method to `GreetingClientController`:
 
-`src/main/java/hello/GreetingClientController.java`
+`src/main/java/demo/GreetingClientController.java`
 [source,java]
 ----
-include::complete/greeting-client/src/main/java/hello/GreetingClientController.java[tag=goodbyeMethod]
+include::complete/greeting-client/src/main/java/demo/GreetingClientController.java[tag=goodbyeMethod]
 ----
 
 It's important that the signature of the fallback method that of the protected method (except for the method name). In this case, neither method has any arguments and both return `String`, so their signatures are a match. 
