@@ -20,7 +20,7 @@ include::https://raw.githubusercontent.com/pcf-guides/getting-started-macros/mas
 
 Starting with the Eureka-enabled "hello world" example from link:/guides/gs/service-registry[Registering and Discovering Services], you'll start by adding a circuit breaker to the client code.
 
-First, modify the Maven POM, adding the starter dependencies for Hystrix and Hystrix AMQP:
+First, modify the Maven POM, adding the Spring Cloud Services starter dependency, which includes Hystrix and Hystrix AMQP:
 
 `pom.xml`
 [source,xml]
@@ -29,7 +29,7 @@ include::complete/greeting-client/pom.xml[tag=dependencies]
 ----
 
 
-The Spring Cloud Hystrix starter adds the Hystrix circuit breaker library to the project so that methods can be designated as being protected by a circuit breaker. The Spring Cloud Hystrix AMQP starter adds support for publishing circuit breaker metrics via AMQP for display in the circuit breaker dashboard.
+The Spring Cloud Services Circuit Breaker starter starter adds the Hystrix circuit breaker library to the project so that methods can be designated as being protected by a circuit breaker. The starter also adds Hystrix AMQP, which enables support for publishing circuit breaker metrics via AMQP for display in the circuit breaker dashboard.
 
 Next, you'll need to enable the circuit breaker capability by annotating `DemoApplication` with `@EnableCircuitBreaker`.
 
@@ -39,7 +39,7 @@ Next, you'll need to enable the circuit breaker capability by annotating `DemoAp
 include::complete/greeting-client/src/main/java/demo/DemoApplication.java[]
 ----
 
-The `@EnableCircuitBreaker` annotation enables Hystrix beans in the application that support circuit breaker behavior. This will enable you to annotate methods with `@HystrixCommand` to designate them as being protected by a circuit breaker. 
+The `@EnableCircuitBreaker` annotation enables Hystrix beans in the application that support circuit breaker behavior. This will enable you to annotate methods with `@HystrixCommand` to designate them as being protected by a circuit breaker.
 
 As an example, the `hello()` method in `GreetingClientController` makes a REST call to the greeting service. If the service is unavailable, the `hello()` method could fail. To protect the method, annotate it with `@HystrixCommand`:
 
@@ -57,7 +57,7 @@ The `fallbackMethod` attribute in `@HystrixCommand` specifies that if the `hello
 include::complete/greeting-client/src/main/java/demo/GreetingClientController.java[tag=goodbyeMethod]
 ----
 
-It's important that the signature of the fallback method that of the protected method (except for the method name). In this case, neither method has any arguments and both return `String`, so their signatures are a match. 
+It's important that the signature of the fallback method that of the protected method (except for the method name). In this case, neither method has any arguments and both return `String`, so their signatures are a match.
 
 That's all of the changes necessary to enable the "hello world" client for circuit breaker protection. Next you'll deploy the service to Pivotal Cloud Foundry and bind it to the Circuit Breaker Dashboard service.
 
@@ -81,7 +81,7 @@ Once the application has been built, you can deploy it to Cloud Foundry using th
 cf push greetingclient -p target/gs-rest-service-0.1.0.jar --random-route
 ```
 
-Here the application is given the name "greetingclient" in Cloud Foundry, the same name used in /gs-service-registry[Registering and Discovering Services]. You are welcome to name it whatever you wish, but remember the name, because you'll need it when you bind the application to the Circuit Breaker Dashboard service. 
+Here the application is given the name "greetingclient" in Cloud Foundry, the same name used in /gs-service-registry[Registering and Discovering Services]. You are welcome to name it whatever you wish, but remember the name, because you'll need it when you bind the application to the Circuit Breaker Dashboard service.
 
 
 Next you'll create an instance of the Circuit Breaker Dashboard service. This service is known as "p-circuit-breaker-dashboard" in the service marketplace and only offers a single service plan named "standard". Using the cf CLI, create an instance of the service named "cb-dashboard":
@@ -105,7 +105,7 @@ At this point you should have both a "hello world" REST service deployed to Clou
 curl http://greetingclient-envious-intima.lion.wild.cf-app.com/hello
 ```
 
-Assuming that the greeting service application is running, the response should be "Hello, World!". 
+Assuming that the greeting service application is running, the response should be "Hello, World!".
 
 Now stop the greetingsvc application:
 
@@ -123,7 +123,7 @@ To view the circuit breaker dashboard, sign into the Cloud Foundry console appli
 
 image::images/1-console.png[Cloud Foundry Console]
 
-The management dashboard for the service instance will appear: 
+The management dashboard for the service instance will appear:
 
 image::images/2-manage.png[Circuit Breaker Dashboard service instance]
 
@@ -142,4 +142,4 @@ The circuit breaker dashboard becomes more interesting as circuit breaker protec
 
 == Summary
 
-Congratulations! You have just enabled circuit breaker protection in a REST service and viewed its status in the Circuit Breaker Dashboard in Cloud Foundry. 
+Congratulations! You have just enabled circuit breaker protection in a REST service and viewed its status in the Circuit Breaker Dashboard in Cloud Foundry.
